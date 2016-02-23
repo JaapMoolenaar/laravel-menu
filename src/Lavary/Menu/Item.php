@@ -102,10 +102,7 @@ class Item {
 		
 		$this->link = $path ? new Link($path) : null;
 		
-		// Activate the item if items's url matches the request uri
-		if( true === $this->builder->conf('auto_activate') ) {
-			$this->checkActivationStatus();
-		} 
+        $this->checkActivationStatus();
 	}
 
 	/**
@@ -339,58 +336,94 @@ class Item {
 		return $this;
 	}
 
-	/**
-	 * Activat the item
-	 *
-	 * @param \Lavary\Menu\Item $item
-	 */
-	public function activate( \Lavary\Menu\Item $item = null ){
-	
-		$item = is_null($item) ? $this : $item;
-		
-		// Check to see which element should have class 'active' set.
-		if( $this->builder->conf('active_element') == 'item' ) {
-			
-			$item->active();
+    /**
+     * Activate the item
+     * 
+     * @param \Lavary\Menu\Item $item
+     * @param boolean $parentDistance
+     */
+    public function activate(\Lavary\Menu\Item $item = null, $parentDistance = null)
+    {
 
-		} else {
-			
-			$item->link->active();
-		}	
-		
-		// If parent activation is enabled:
-		if( true === $this->builder->conf('activate_parents') ){
-			// Moving up through the parent nodes, activating them as well.
-			if( $item->parent ) {
-				
-				$this->activate( $this->builder->whereId( $item->parent )->first() );
+        $item = is_null($item) ? $this : $item;
 
-			}
-		}
-	}
+        // Check to see which element should have class 'active' set.
+        if( $this->builder->conf('active_element') == 'item' ) {
+
+            $item->active(null, $parentDistance);
+
+        } else {
+
+            $item->link->active(null, $parentDistance);
+        }	
+
+
+        // Moving up through the parent nodes, activating them as well.
+        if ($item->parent) {
+            if (null === $parentDistance) {
+                $parentDistance = 1;
+            }
+            
+            $this->activate( $this->builder->whereId( $item->parent )->first(), $parentDistance++ );
+
+        }
+    }
 
 	/**
 	 * Make the item active
 	 *
 	 * @return Lavary\Menu\Item
+     * @param boolean $parentDistance
 	 */
-	public function active($pattern = null){
+	public function active($pattern = null, $parentDistance = null)
+    {
 	
 		if(!is_null($pattern)) {
 
 			$pattern = ltrim(preg_replace('/\/\*/', '(/.*)?', $pattern), '/');
 			if( preg_match("@^{$pattern}\z@", \Request::path()) ){
 				$this->activate();
-			}	
+            }
 
 			return $this;
 		}
 
-		$this->attributes['class'] = Builder::formatGroupClass(array('class' => $this->builder->conf('active_class')), $this->attributes);
+        // If auto activation is enabled we add the active_class
+        // If this is a parent and parent activation is enabled we also add
+        // the active_class
+        if (true === $this->builder->conf('auto_activate')
+            && null === $parentDistance
+            || (null !== $parentDistance
+                && true === $this->builder->conf('activate_parents')
+            )
+        ) {
+            $this->attributes['class'] = Builder::formatGroupClass(
+                array('class' => $this->builder->conf('active_class')),
+                $this->attributes
+            );
+        }
+
+
+        $this->data('_active', true);
+        
+        if (null !== $parentDistance) {
+            $this->data('_parentdistance', $parentDistance);
+        } else {
+            $this->data('_parentdistance', 0);
+        }
 		
 		return $this;
 	}
 
+    /**
+     * CReturns whether an item is active
+     * 
+     * @return boolean
+     */
+    public function isActive() {
+        return !!$this->data('_active');
+    }
+    
 	/**
 	 * Set or get items's meta data
 	 *

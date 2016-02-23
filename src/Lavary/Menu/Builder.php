@@ -129,6 +129,23 @@ class Builder {
 		return $this->items;
 	
 	}
+    
+	/**
+	 * Return all active items in the collection
+	 *
+	 * @return array
+	 */
+	public function allActive()
+    {
+		return $this->items->filter(
+            function ($item) {
+                if($item->data('_active')) {
+                    return true;
+                }
+                return false;
+            }
+        )->sortBy('_parentdistance', SORT_DESC);
+	}
 
 	/**
 	 * Return the first item in the collection
