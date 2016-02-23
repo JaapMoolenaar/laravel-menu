@@ -30,8 +30,7 @@ class Menu {
 	{
 		if(is_callable($callback))
 		{
-			
-			$menu = new Builder($name, $this->loadConf($name));
+			$menu = $this->makeBuilder($name, $this->loadConf($name));
 			
 			// Registering the items
 			call_user_func($callback, $menu);
@@ -46,6 +45,18 @@ class Menu {
 		}
 	}
 
+    /**
+     * Create a builder instance 
+     * 
+     * @param string $name
+     * @param array $config
+     * @return \Lavary\Menu\Builder
+     */
+    protected function makeBuilder($name, $config) 
+    {
+        return new Builder($name, $config);
+    }
+    
 	/**
 	 * Loads and merges configuration data
 	 *
