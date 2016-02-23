@@ -144,7 +144,14 @@ class Builder {
                 }
                 return false;
             }
-        )->sortBy('_parentdistance', SORT_DESC);
+        )
+        ->sort(function ($a, $b) {
+            if ($a->data('_parentdistance') == $b->data('_parentdistance')) {
+                return 0;
+            }
+
+            return ($a->data('_parentdistance') < $b->data('_parentdistance')) ? 1 : -1;
+        });
 	}
 
 	/**
