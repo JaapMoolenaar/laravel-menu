@@ -344,19 +344,9 @@ class Item {
      */
     public function activate(\Lavary\Menu\Item $item = null, $parentDistance = null)
     {
-
         $item = is_null($item) ? $this : $item;
-
-        // Check to see which element should have class 'active' set.
-        if( $this->builder->conf('active_element') == 'item' ) {
-
-            $item->active(null, $parentDistance);
-
-        } else {
-
-            $item->link->active(null, $parentDistance);
-        }	
-
+        
+        $item->active(null, $parentDistance);
 
         // Moving up through the parent nodes, activating them as well.
         if ($item->parent) {
@@ -365,7 +355,6 @@ class Item {
             }
             
             $this->activate( $this->builder->whereId( $item->parent )->first(), $parentDistance++ );
-
         }
     }
 
@@ -377,7 +366,6 @@ class Item {
 	 */
 	public function active($pattern = null, $parentDistance = null)
     {
-	
 		if(!is_null($pattern)) {
 
 			$pattern = ltrim(preg_replace('/\/\*/', '(/.*)?', $pattern), '/');
@@ -397,12 +385,16 @@ class Item {
                 && true === $this->builder->conf('activate_parents')
             )
         ) {
-            $this->attributes['class'] = Builder::formatGroupClass(
-                array('class' => $this->builder->conf('active_class')),
-                $this->attributes
-            );
+            // Check to see which element should have class 'active' set.
+            if ($this->builder->conf('active_element') == 'item') {
+                $this->attributes['class'] = Builder::formatGroupClass(
+                    array('class' => $this->builder->conf('active_class')),
+                    $this->attributes
+                );
+            } else {
+                $this->link->active();
+            }
         }
-
 
         $this->data('_active', true);
         
