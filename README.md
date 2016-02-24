@@ -1,9 +1,8 @@
 # Laravel Menu
-[![Latest Stable Version](https://poser.pugx.org/lavary/laravel-menu/v/stable.svg)](https://packagist.org/packages/lavary/laravel-menu)
-[![Latest Unstable Version](https://poser.pugx.org/lavary/laravel-menu/v/unstable.svg)](https://packagist.org/packages/lavary/laravel-menu)
-[![Total Downloads](https://poser.pugx.org/lavary/laravel-menu/downloads.svg)](https://packagist.org/packages/lavary/laravel-menu)
-[![License](https://poser.pugx.org/lavary/laravel-menu/license.svg)](https://packagist.org/packages/lavary/laravel-menu)
-
+[![Latest Stable Version](https://poser.pugx.org/jaapmoolenaar.nl/laravel-menu/v/stable)](https://packagist.org/packages/jaapmoolenaar.nl/laravel-menu) 
+[![Total Downloads](https://poser.pugx.org/jaapmoolenaar.nl/laravel-menu/downloads)](https://packagist.org/packages/jaapmoolenaar.nl/laravel-menu) 
+[![Latest Unstable Version](https://poser.pugx.org/jaapmoolenaar.nl/laravel-menu/v/unstable)](https://packagist.org/packages/jaapmoolenaar.nl/laravel-menu) 
+[![License](https://poser.pugx.org/jaapmoolenaar.nl/laravel-menu/license)](https://packagist.org/packages/jaapmoolenaar.nl/laravel-menu)
 
 A quick way to create menus in [Laravel 5](http://laravel.com/)
 
