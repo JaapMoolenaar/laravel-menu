@@ -6,6 +6,13 @@ use Blade;
 class ServiceProvider extends BaseServiceProvider {
 
 	/**
+	 * Indicates if loading of the provider is deferred.
+	 *
+	 * @var bool
+	 */
+	protected $defer = true;
+    
+	/**
 	 * Register the service provider.
 	 *
 	 * @return void
@@ -26,7 +33,7 @@ class ServiceProvider extends BaseServiceProvider {
 	 * @return void
 	 */
 	public function boot()
-	{
+	{        
 		// Extending Blade engine
 		$this->registerBladeExtensions();
 
@@ -81,4 +88,14 @@ class ServiceProvider extends BaseServiceProvider {
     {
         return '/(?<!\w)(\s*)@' . $function . '(\s*)/';
     }
+
+	/**
+	 * Get the services provided by the provider.
+	 *
+	 * @return array
+	 */
+	public function provides()
+	{
+		return array('menu');
+	}
 }
